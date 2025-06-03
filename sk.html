@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengumuman Kelulusan SMPN 7 Cimahi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2193b0, #6dd5ed);
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+    }
+
+    .container.active { display: block; }
+
+    h1 { margin-bottom: 20px; }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff7e5f;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover { background-color: #feb47b; }
+
+    #final-result {
+      background-color: rgba(255, 255, 255, 0.95);
+      color: #333;
+      padding: 25px;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #final-result h2, #kelas, #prank-text, #lulus-text, #ucapan {
+      opacity: 0;
+      transition: opacity 1s ease-in;
+    }
+
+    #kelas {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #0a6;
+    }
+
+    #prank-text {
+      font-size: 1.5em;
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    #prank-text.striked::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background-color: red;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      animation: strike 1s forwards;
+    }
+
+    #lulus-text {
+      font-size: 2em;
+      color: green;
+      font-weight: bold;
+    }
+
+    #ucapan {
+      font-size: 1em;
+      margin-top: 20px;
+      color: #444;
+    }
+
+    #marquee-text, #marquee-logo {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 25px;
+      animation: marquee 10s linear infinite;
+    }
+
+    #marquee-logo {
+      color: #00bcd4;
+      font-size: 1.3em;
+      margin: 20px 0 25px 0;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes strike {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: white;
+      font-weight: bold;
+    }
+
+    #foto-siswa {
+      margin-top: 20px;
+      width: 120px;
+      height: 150px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 1s ease-in;
+    }
+
+    /* Style untuk halaman ucapan selamat baru */
+    #ucapan-selamat-page {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+      color: #fff; /* Pastikan teks terlihat */
+    }
+
+    #ucapan-selamat-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        color: #ff7e5f; /* Warna yang lebih menonjol */
+    }
+
+    #ucapan-selamat-page p {
+        font-size: 1.2em;
+        line-height: 1.6em;
+        margin-bottom: 20px;
+    }
+
+    #ucapan-selamat-page .emoji {
+        font-size: 3em;
+        margin-bottom: 15px;
+        display: block; /* Agar emoji di tengah */
+    }
+
+    #ucapan-selamat-page button {
+        background-color: #6dd5ed; /* Warna tombol yang berbeda */
+    }
+
+    #ucapan-selamat-page button:hover {
+        background-color: #2193b0;
+    }
+
+    /* CSS baru untuk slideshow foto */
+    #photo-slideshow-page {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 600px; /* Lebih lebar untuk slide */
+      backdrop-filter: blur(10px);
+      color: #fff;
+      position: relative; /* Untuk positioning tombol navigasi */
+    }
+
+    .slideshow-container {
+      position: relative;
+      margin: auto;
+      max-width: 100%;
+      overflow: hidden; /* Penting untuk menyembunyikan gambar di luar tampilan */
+    }
+
+    /* === Perubahan Utama untuk Efek Muncul Timbul === */
+    .mySlides {
+      display: none;
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transform: scale(0.8); /* Skala awal yang lebih kecil */
+      opacity: 0; /* Opasitas awal 0 */
+      transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out; /* Transisi untuk opasitas dan skala */
+    }
+
+    .mySlides.active-slide { /* Gunakan kelas baru untuk slide aktif */
+      opacity: 1; /* Opasitas akhir 1 */
+      transform: scale(1); /* Skala akhir normal */
+    }
+    /* ============================================== */
+
+    /* Tombol Prev/Next */
+    /* Sembunyikan tombol prev/next secara default, mereka akan muncul saat kursor di atas */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background-color: rgba(0,0,0,0.6);
+      /* opacity: 0; */ /* Opsional: membuat tombol muncul saat hover */
+    }
+
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    /* .slideshow-container:hover .prev,
+    .slideshow-container:hover .next {
+      opacity: 1;
+    } */ /* Opsional: efek hover untuk tombol */
+
+    .prev:hover, .next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    /* Teks nomor (1/3 dll) */
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+    }
+
+    /* Titik-titik indikator */
+    .dot {
+      cursor: pointer;
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+
+    .active-dot, .dot:hover {
+      background-color: #717171;
+    }
+
+    /* CSS baru untuk efek ketik */
+    .typed-text {
+      font-size: 1.2em; /* Sesuaikan ukuran font sesuai keinginan */
+      line-height: 1.6em;
+      margin-bottom: 10px;
+      white-space: pre-wrap; /* Mempertahankan spasi dan baris baru */
+      overflow: hidden; /* Sembunyikan teks yang belum diketik */
+      border-right: .15em solid orange; /* Efek kursor ketik */
+      animation:
+        blinking-cursor .75s step-end infinite;
+    }
+
+    /* Hilangkan kursor setelah selesai mengetik */
+    .typed-text.finished-typing {
+      border-right: none;
+      animation: none;
+    }
+
+    @keyframes blinking-cursor {
+      from, to { border-color: transparent }
+      50% { border-color: orange; }
+    }
+
+    /* Gaya untuk teks di slideshow */
+    #slideshow-text-container {
+      margin-bottom: 20px; /* Jarak antara teks dan gambar */
+      min-height: 150px; /* Berikan tinggi minimum agar layout tidak bergeser */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #slideshow-text-container .typed-text {
+      font-size: 1.1em;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Tambahkan shadow agar lebih mudah dibaca */
+    }
+  </style>
+</head>
+<body>
+
+<div class="main">
+  <div id="input-page" class="container active">
+    <h1>Pengumuman Kelulusan</h1>
+    <div class="input-group">
+      <label for="nama">Nama:</label>
+      <input type="text" id="nama" placeholder="Masukkan nama lengkap">
+    </div>
+    <div class="input-group">
+      <label for="nis">NIS:</label>
+      <input type="text" id="nis" placeholder="Masukkan NIS">
+    </div>
+    <div class="input-group">
+      <label for="tgl">Tanggal Lahir:</label>
+      <input type="date" id="tgl">
+    </div>
+    <div class="input-group">
+      <label for="foto">Upload Foto Anda:</label>
+      <input type="file" id="foto" accept="image/*">
+    </div>
+    <button onclick="lanjutKeLogo()">Lanjut</button>
+  </div>
+
+  <div id="logo-page" class="container">
+    <h1>Selamat Datang</h1>
+    <br><h3>Semoga Anda Lulus</h3>
+    <div class="logo-container">
+      <img src="smp.png" alt="SMPN 7 Cimahi" style="max-width: 150px; margin: auto;">
+    </div>
+    <div id="marquee-logo" style="color: white;">Pengumuman kelulusan</div>
+    <button onclick="lanjutKeHasil()">Lihat Hasil</button>
+  </div>
+
+  <div id="hasil-page" class="container">
+    <div id="final-result">
+      <img id="foto-siswa" src="" alt="Foto Siswa" />
+      <h2 id="output-nama">Nama: <span></span></h2>
+      <h2 id="output-nis">NIS: <span></span></h2>
+      <h2 id="output-tgl">Tanggal Lahir: <span></span></h2>
+      <div id="kelas">Kelas: 9 F</div>
+      <div id="prank-text">Tidak Lulus</div>
+      <div id="lulus-text">LULUS 🎉</div>
+      <div id="ucapan">Selamat! Kamu telah lulus dari SMPN 7 CIMAHI</div>
+      <div id="marquee-text">🎉Semoga menjadi pribadi yang baik!🎉</div>
+    </div>
+    <button onclick="lanjutKeUcapanSelamat()">Lanjut</button>
+  </div>
+
+  <div id="ucapan-selamat-page" class="container">
+    <span class="emoji">🎓✨</span>
+    <h1>Selamat & Sukses!</h1>
+    <div id="typed-text-ucapan-1" class="typed-text"></div>
+    <div id="typed-text-ucapan-2" class="typed-text"></div>
+    <div id="typed-text-ucapan-3" class="typed-text"></div>
+    <div id="typed-text-ucapan-4" class="typed-text"></div>
+    <button onclick="lanjutKeSlideshow()">Lihat</button>
+  </div>
+
+  <div id="photo-slideshow-page" class="container">
+    <h1>TERIMAKASIH</h1>
+    <div id="slideshow-text-container">
+      <div id="typed-text-slideshow" class="typed-text"></div>
+    </div>
+    <div class="slideshow-container">
+      <div class="mySlides">
+        <div class="numbertext">1 / 6</div>
+        <img src="7.png" style="width:100%" alt="Foto 1">
+      </div>
+    <div class="slideshow-container">
+      <div class="mySlides">
+        <div class="numbertext">1 / 6</div>
+        <img src="1.jpg" style="width:100%" alt="Foto 1">
+      </div>
+
+      <div class="mySlides">
+        <div class="numbertext">2 / 6</div>
+        <img src="2.jpg" style="width:100%" alt="Foto 2">
+      </div>
+
+      <div class="mySlides">
+        <div class="numbertext">3 / 6</div>
+        <img src="3.jpeg" style="width:100%" alt="Foto 3">
+      </div>
+
+      <div class="mySlides">
+        <div class="numbertext">4 / 6</div>
+        <img src="4.jpeg" style="width:100%" alt="Foto 4">
+      </div>
+
+      <div class="mySlides">
+        <div class="numbertext">5 / 6</div>
+        <img src="5.jpeg" style="width:100%" alt="Foto 5">
+      </div>
+
+      <div class="mySlides">
+        <div class="numbertext">6 / 6</div>
+        <img src="6.jpeg" style="width:100%" alt="Foto 6">
+      </div>
+    </div>
+    <br>
+
+    <div style="text-align:center">
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+      <span class="dot" onclick="currentSlide(4)"></span>
+      <span class="dot" onclick="currentSlide(5)"></span>
+      <span class="dot" onclick="currentSlide(6)"></span>
+    </div>
+
+<footer>SMPN 7 CIMAHI &copy; 2025</footer>
+
+<audio id="sfx-lulus" src="baru.mp3" preload="auto"></audio>
+
+<script>
+  let dataSiswa = { nama: '', nis: '', tgl: '', fotoUrl: '' };
+  let slideshowTimeout; // Variabel untuk menyimpan ID timeout slideshow otomatis
+
+  // Teks untuk efek ketik di halaman ucapan selamat
+  const linesToTypeUcapan = [
+    "Kami seluruh staf dan guru SMPN 7 Cimahi mengucapkan selamat atas kelulusan Anda! Ini adalah awal dari babak baru dalam hidup Anda.",
+    "Teruslah belajar, berinovasi, dan berkontribusi untuk masa depan yang lebih cerah.",
+    "Semoga Anda selalu sukses di jenjang pendidikan selanjutnya dan meraih impian Anda.",
+    "Dengan bangga kami sampaikan: Terima Kasih telah menjadi bagian dari keluarga SMPN 7 Cimahi!"
+  ];
+  let currentLineIndexUcapan = 0;
+  let typingSpeedUcapan = 5; // Kecepatan ketik (ms per karakter)
+  let lineDelayUcapan = 1500; // Penundaan antar baris (ms)
+
+  // Teks untuk efek ketik di halaman slideshow
+  const textSlideshow = `Setiap tawa, bahagia, dan cerita yang terukir di ruang kelas ini adalah bagian dari perjalanan indah kita.
+Foto-foto ini bukan sekadar gambar, tapi potongan waktu yang akan selalu hidup dalam ingatan.
+
+Meski langkah kita akan menuju arah yang berbeda,
+kenangan ini akan selalu menyatukan kita dalam cerita yang sama:
+kisah tentang kebersamaan, semangat, dan persahabatan.
+
+Terima kasih telah menjadi bagian dari perjalanan ini.
+Sampai jumpa di masa depan,
+di mana kenangan ini akan kita kenang dengan senyum yang sama tulusnya. 💛`;
+  let typingSpeedSlideshow = 20; // Kecepatan ketik untuk slideshow (sedikit lebih cepat)
+
+  function typeWriter(targetElementId, text, speed, callback) {
+    const targetElement = document.getElementById(targetElementId);
+    if (!targetElement) return;
+
+    let i = 0;
+    targetElement.textContent = ''; // Kosongkan elemen sebelum mengetik
+    targetElement.classList.add('typed-text'); // Tambahkan kelas untuk efek kursor
+
+    function type() {
+      if (i < text.length) {
+        targetElement.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else {
+        targetElement.classList.add('finished-typing'); // Hilangkan kursor setelah selesai
+        if (callback) {
+          callback();
+        }
+      }
+    }
+    type();
+  }
+
+  function startTypingAnimationUcapan() {
+    currentLineIndexUcapan = 0;
+    // Reset semua elemen typed-text di halaman ucapan
+    for (let i = 1; i <= linesToTypeUcapan.length; i++) {
+      const el = document.getElementById(`typed-text-ucapan-${i}`);
+      if (el) {
+        el.textContent = '';
+        el.classList.remove('finished-typing');
+      }
+    }
+    typeNextLineUcapan();
+  }
+
+  function typeNextLineUcapan() {
+    if (currentLineIndexUcapan < linesToTypeUcapan.length) {
+      const targetId = `typed-text-ucapan-${currentLineIndexUcapan + 1}`;
+      typeWriter(targetId, linesToTypeUcapan[currentLineIndexUcapan], typingSpeedUcapan, () => {
+        currentLineIndexUcapan++;
+        if (currentLineIndexUcapan < linesToTypeUcapan.length) {
+          setTimeout(typeNextLineUcapan, lineDelayUcapan); // Penundaan sebelum baris berikutnya
+        }
+      });
+    }
+  }
+
+  function startTypingAnimationSlideshow() {
+    const targetElement = document.getElementById('typed-text-slideshow');
+    if (targetElement) {
+      targetElement.textContent = ''; // Kosongkan sebelum mengetik ulang
+      targetElement.classList.remove('finished-typing'); // Hapus kelas selesai jika sudah ada
+    }
+    typeWriter('typed-text-slideshow', textSlideshow, typingSpeedSlideshow, null);
+  }
+
+
+  function lanjutKeLogo() {
+    const nama = document.getElementById("nama").value.trim();
+    const nis = document.getElementById("nis").value.trim();
+    const tgl = document.getElementById("tgl").value;
+    const fotoInput = document.getElementById("foto");
+
+    if (!nama || !nis || !tgl || fotoInput.files.length === 0) {
+      alert("Harap lengkapi semua data dan upload foto.");
+      return;
+    }
+
+    if (!/^\d+$/.test(nis)) {
+      alert("NIS harus berupa angka.");
+      return;
+    }
+
+    if (/\d/.test(nama)) {
+      alert("Nama tidak boleh mengandung angka.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      dataSiswa = { nama, nis, tgl, fotoUrl: e.target.result };
+      document.getElementById("input-page").classList.remove("active");
+      document.getElementById("logo-page").classList.add("active");
+
+      const audio = document.getElementById("sfx-lulus");
+      audio.play().catch(err => {
+        console.log("Audio autoplay diblokir:", err);
+      });
+    };
+    reader.readAsDataURL(fotoInput.files[0]);
+  }
+
+  function lanjutKeHasil() {
+    document.getElementById("logo-page").classList.remove("active");
+    document.getElementById("hasil-page").classList.add("active");
+
+    const foto = document.getElementById("foto-siswa");
+    const nama = document.getElementById("output-nama");
+    const nis = document.getElementById("output-nis");
+    const tgl = document.getElementById("output-tgl");
+    const prank = document.getElementById("prank-text");
+    const lulus = document.getElementById("lulus-text");
+    const ucapan = document.getElementById("ucapan");
+    const kelas = document.getElementById("kelas");
+
+    // Reset opacity
+    [foto, nama, nis, tgl, prank, lulus, ucapan, kelas].forEach(e => e.style.opacity = 0);
+    prank.classList.remove("striked");
+
+    // Atur konten
+    foto.src = dataSiswa.fotoUrl;
+    nama.querySelector("span").textContent = dataSiswa.nama;
+    nis.querySelector("span").textContent = dataSiswa.nis;
+    tgl.querySelector("span").textContent = dataSiswa.tgl;
+
+    // Animasi muncul satu-satu
+    setTimeout(() => foto.style.opacity = 1, 500);
+    setTimeout(() => nama.style.opacity = 1, 1000);
+    setTimeout(() => nis.style.opacity = 1, 1500);
+    setTimeout(() => tgl.style.opacity = 1, 2000);
+    setTimeout(() => kelas.style.opacity = 1, 2500);
+    setTimeout(() => prank.style.opacity = 1, 3000);
+    setTimeout(() => prank.classList.add("striked"), 4000);
+    setTimeout(() => lulus.style.opacity = 1, 5000);
+    setTimeout(() => ucapan.style.opacity = 1, 5500);
+
+    const audio = document.getElementById("sfx-lulus");
+    audio.play().catch(err => console.log("Audio playback error:", err));
+  }
+
+  function lanjutKeUcapanSelamat() {
+    document.getElementById("hasil-page").classList.remove("active");
+    document.getElementById("ucapan-selamat-page").classList.add("active");
+    startTypingAnimationUcapan(); // Panggil fungsi untuk memulai efek ketik ucapan
+  }
+
+  function lanjutKeSlideshow() {
+    document.getElementById("ucapan-selamat-page").classList.remove("active");
+    document.getElementById("photo-slideshow-page").classList.add("active");
+    startAutoSlideshow(); // Mulai slideshow otomatis saat halaman ini aktif
+    startTypingAnimationSlideshow(); // Mulai efek ketik untuk teks slideshow
+  }
+
+  function kembaliKeAwal() {
+    document.getElementById("photo-slideshow-page").classList.remove("active");
+    document.getElementById("input-page").classList.add("active");
+    stopAutoSlideshow(); 
+    // Bersihkan teks yang diketik di halaman ucapan selamat
+    for (let i = 1; i <= linesToTypeUcapan.length; i++) {
+      const el = document.getElementById(`typed-text-ucapan-${i}`);
+      if (el) {
+        el.textContent = '';
+        el.classList.remove('finished-typing');
+      }
+    }
+    // Bersihkan teks yang diketik di halaman slideshow
+    const slideshowTextEl = document.getElementById('typed-text-slideshow');
+    if (slideshowTextEl) {
+        slideshowTextEl.textContent = '';
+        slideshowTextEl.classList.remove('finished-typing');
+    }
+
+    document.getElementById("nama").value = '';
+    document.getElementById("nis").value = '';
+    document.getElementById("tgl").value = '';
+    document.getElementById("foto").value = '';
+  }
+
+  let slideIndex = 1;
+  let slideshowInterval = 3000; // Interval pergantian slide (3 detik)
+
+  function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+
+    // Clear previous timeout to prevent multiple calls
+    clearTimeout(slideshowTimeout); 
+
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+
+    for (i = 0; i < slides.length; i++) {
+      slides[i].classList.remove("active-slide");
+      slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active-dot", "");
+    }
+
+    slides[slideIndex-1].style.display = "block";
+    setTimeout(() => {
+      slides[slideIndex-1].classList.add("active-slide");
+    }, 50); 
+    dots[slideIndex-1].className += " active-dot";
+
+    // Set timeout untuk slide berikutnya (otomatis)
+    slideshowTimeout = setTimeout(() => {
+      plusSlides(1); // Panggil plusSlides untuk ke slide berikutnya
+    }, slideshowInterval); 
+  }
+
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  function currentSlide(n) {
+    showSlides(slideIndex = n);
+  }
+
+  function startAutoSlideshow() {
+    // Pastikan tidak ada slideshow yang berjalan ganda
+    stopAutoSlideshow(); 
+    slideIndex = 1; // Mulai dari slide pertama setiap kali
+    showSlides(slideIndex);
+  }
+
+  function stopAutoSlideshow() {
+    clearTimeout(slideshowTimeout);
+  }
+</script>
+
+</body>
+</html>
